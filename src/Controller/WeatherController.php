@@ -4,12 +4,20 @@ namespace App\Controller;
 
 use App\GoogleApi\WeatherService;
 use App\Model\NullWeather;
+use App\Validator\DateValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 
 class WeatherController extends AbstractController
 {
     public function index($day)
     {
+        $validator = new DateValidator($day);
+
+        if(!$validator->validateDateFormat() || !$validator->validateDateTime()) {
+            return new Response($validator->getError());
+        }
+
         try {
             $fromGoogle = new WeatherService();
             $weather = $fromGoogle->getDay(new \DateTime($day));
@@ -22,8 +30,8 @@ class WeatherController extends AbstractController
                 'date'      => $weather->getDate()->format('Y-m-d'),
                 'dayTemp'   => $weather->getDayTemp(),
                 'nightTemp' => $weather->getNightTemp(),
-                'sky'       => $weather->getSky()
-            ],
+                'sky'       => $weather->getSky(),
+            ]
         ]);
     }
 }
