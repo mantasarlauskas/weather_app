@@ -12,10 +12,9 @@ class WeatherController extends AbstractController
 {
     public function index($day)
     {
-        if ($day) {
-            $validator = new DateValidator($day);
-
-            if (!$validator->validateDateFormat() || !$validator->validateDateTime()) {
+        if (!is_null($day)) {
+            $validator = new DateValidator();
+            if (!$validator->validateDateFormat($day) || !$validator->validateDateTime(new \DateTime($day))) {
                 return new Response($validator->getError());
             }
         }

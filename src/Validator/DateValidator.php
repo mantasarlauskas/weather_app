@@ -17,20 +17,19 @@ class DateValidator
     /**
      * @var string
      */
-    private $date;
-
-    /**
-     * @var string
-     */
     private $error;
 
     /**
-     * DateValidator constructor.
-     * @param string $date
+     * @var \Symfony\Component\Validator\Validator\ValidatorInterface
      */
-    public function __construct(string $date)
+    private $validator;
+
+    /**
+     * DateValidator constructor.
+     */
+    public function __construct()
     {
-        $this->date = $date;
+        $this->validator = Validation::createValidator();
     }
 
     /**
@@ -41,39 +40,51 @@ class DateValidator
         return $this->error;
     }
 
+    private function resetError(): void
+    {
+        $this->error = null;
+    }
+
     /**
+     * @param $date
+     * @param $dateConstraint
      * @return bool
      */
-    public function validateDateFormat(): bool {
-        $dateConstraint = new Assert\Date();
-        $dateConstraint->message = 'Wrong date format';
-
-        $validator = Validation::createValidator();
-        $errors = $validator->validate(
-            $this->date,
-            $dateConstraint
-        );
+    private function validateByConstraint($date, $dateConstraint): bool
+    {
+        $errors = $this->validator->validate($date, $dateConstraint);
 
         if (count($errors) !== 0) {
             $this->error = $errors[0]->getMessage();
             return false;
         }
 
+        $this->resetError();
         return true;
     }
 
     /**
+     * @param string $date
      * @return bool
      */
-    public function validateDateTime(): bool {
-        $today = new \DateTime();
+    public function validateDateFormat(string $date): bool
+    {
+        $dateConstraint = new Assert\Date();
+        $dateConstraint->message = 'Wrong date format';
 
-        if(new \DateTime($this->date) <= $today) {
-            $this->error = 'Date must be in the future';
-            return false;
-        }
+        return $this->validateByConstraint($date, $dateConstraint);
+    }
 
-        return true;
+    /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function validateDateTime(\DateTime $date): bool
+    {
+        $dateConstraint = new Assert\GreaterThanOrEqual('today');
+        $dateConstraint->message = 'Date must not be in the past';
+
+        return $this->validateByConstraint($date, $dateConstraint);
     }
 
 }
