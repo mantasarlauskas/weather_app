@@ -12,6 +12,7 @@
         "symfony/dotenv": "*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",
+        "symfony/security-bundle": "*",
         "symfony/twig-bundle": "*",
         "symfony/var-dumper": "*",
         "symfony/webpack-encore-pack": "^1.0",
