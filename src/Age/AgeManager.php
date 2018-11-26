@@ -54,15 +54,13 @@ class AgeManager
     /**
      * @return string|null
      */
-    public function getAdultMessage() : ?string
+    public function getAdultMessage() : string
     {
         try {
             $isAdult = $this->adultChecker->isAdult($this->age);
             return 'Am I an adult ?  ---- ' . ($isAdult ? 'YES !!' : 'NO !!!');
         } catch (\TypeError $exp) {
-            return null;
+            return 'Age is not set';
         }
     }
-
-
 }

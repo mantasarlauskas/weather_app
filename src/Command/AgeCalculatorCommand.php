@@ -32,18 +32,23 @@ class AgeCalculatorCommand extends Command
     {
         $this
             ->setDescription('Age calculator')
-            ->addArgument('date', InputArgument::REQUIRED, 'Date')
+            ->addArgument('birthDate', InputArgument::REQUIRED, 'Birth Date')
             ->addOption('adult', null, InputOption::VALUE_NONE, 'Is adult')
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('date');
+        $birthDate = $input->getArgument('birthDate');
 
-        if ($arg1) {
-            $io->note(sprintf($this->ageManager->getAgeMessage($arg1)));
+        if ($birthDate) {
+            $io->note(sprintf($this->ageManager->getAgeMessage($birthDate)));
         }
 
         if ($input->getOption('adult')) {

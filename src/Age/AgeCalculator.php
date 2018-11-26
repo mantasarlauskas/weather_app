@@ -22,5 +22,4 @@ class AgeCalculator
 
         return $birthDate->diff($today)->y;
     }
-
 }

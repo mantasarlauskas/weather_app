@@ -17,7 +17,7 @@ class AdultChecker
      */
     public function isAdult(int $age) : bool
     {
-        return $age >= 18 ? true : false;
+        return $age >= 18;
     }
 
 }
