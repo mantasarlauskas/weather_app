@@ -1,0 +1,14 @@
+parameters:
+
+services:
+    app.age.age_calculator:
+        class: App\Age\AgeCalculator
+
+    app.age.adult_checker:
+        class: App\Age\AdultChecker
+
+    app.age.age_manager:
+        class: App\Age\AgeManager
+        arguments:
+            - '@app.age.age_calculator'
+            - '@app.age.adult_checker'
